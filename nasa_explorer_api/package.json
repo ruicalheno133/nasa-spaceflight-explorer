@@ -1,0 +1,22 @@
+{
+  "name": "nasa-explorer-api",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "PORT=3001 node ./bin/www",
+    "dev": "PORT=3001 nodemon ./bin/ww"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.3",
+    "cors": "^2.8.5",
+    "dbpedia-sparql-client": "^0.9.8",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "http-errors": "~1.6.2",
+    "jade": "~1.11.0",
+    "json-groupby": "^1.1.0",
+    "lodash": "^4.17.11",
+    "morgan": "~1.9.0",
+    "sparql-client-2": "^0.6.3"
+  }
+}

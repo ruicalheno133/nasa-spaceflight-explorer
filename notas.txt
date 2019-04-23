@@ -1,0 +1,52 @@
+ONTOLOGIA : NASA Space Flight & Astronaut data
+MAIS INFO : https://lod-cloud.net/dataset/data-incubator-nasa
+
+====================
+== ONTOLOGIAS ======
+====================
+
+FOAF : <http://xmlns.com/foaf/0.1/>
+PURL_SPACE : <http://purl.org/net/schemas/space/>
+
+====================
+== CLASSES =========
+====================
+
+--- 1. SPARQL ----
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT DISTINCT ?o WHERE {
+    ?s rdf:type ?o .
+} LIMIT 100
+
+--- 1. RESULT ---
+Mission
+Spacecraft 
+Discipline 
+Launchsite 
+MissionRole 
+Launch 
+Episode 
+Person
+Image
+
+============================
+== MISSION PROPERTIES ======
+============================
+
+--- SPARQL ---
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX purl_space: <http://purl.org/net/schemas/space/>
+
+SELECT DISTINCT ?p WHERE {
+    ?s rdf:type purl_space:Mission .
+    ?s ?p ?o.
+} LIMIT 100
+
+--- RESULT ---
+
+title
+missionRole 
+isPrimaryTopicOf

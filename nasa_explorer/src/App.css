@@ -1,0 +1,120 @@
+html, body {
+  background-color: #010B18 !important;
+  color: white;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.link {
+  text-decoration: none;
+  color: white;
+}
+
+
+.overviewContainer {
+  background-color: #010B18;
+  height: 85vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  text-align: center;
+}
+
+.searchbox {
+  flex-direction: column;
+  align-items: center;
+}
+
+.missionsContainer {
+  margin: 0 auto;
+  width: 60%;
+}
+
+.spacecraftsContainer {
+  margin: 0 auto;
+  width: 60%;
+}
+
+.peopleContainer {
+  margin: 0 auto;
+  width: 60%;
+}
+
+.missionContainer {
+  margin: 0 auto;
+  width: 90%;
+}
+
+.spacecraftContainer {
+  margin: 0 auto;
+  width: 90%;
+}
+
+.loadMore {
+  background-color: transparent;
+  border: 1px solid white; 
+  color: white;
+  height: 3em;  
+  width: 20em;
+  margin-top: 2em;
+  margin-bottom: 5em;
+}
+
+.missionChevron {
+  text-align: center;
+}
+
+.nav {
+  background-color: #010B18 !important;
+  box-shadow: 0 0 !important;
+  color: white !important;
+  height: 15vh;
+  text-align: left;
+  padding-left: 5vh;
+}
+
+.mini{
+  height: 10vh;
+}
+
+.brand {
+  font-size: 5vh !important;
+  text-decoration: underline ;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.nasaFont {
+  font-family: 'Righteous' !important;
+}
+
+.menuButtons {
+  margin-left: 10vh;
+}
+
+.nav .menuButtons .menuButton {
+  margin-right: 5vh;
+}
+
+.active Button{
+  border-bottom: 1px solid white;
+  border-top: 1px solid white ;
+}
+
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
