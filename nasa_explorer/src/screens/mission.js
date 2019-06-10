@@ -26,7 +26,7 @@ class Mission extends Component {
   getData() {
     axios.get('http://localhost:3001/sparql/missions/' + this.props.match.params.missionURI)
          .then(data => {
-            axios.get('http://localhost:3001/sparql/dbpedia/missionInfo/' + encodeURIComponent(data.data[0].dbpediaURI))
+            axios.get('http://localhost:3001/dbpedia/missionInfo/' + encodeURIComponent(data.data[0].dbpediaURI))
                   .then(dbpData => {this.setState({missionInfo: dbpData.data, missionName: data.data[0].name})})
          })
          .catch(err => console.log(err) )

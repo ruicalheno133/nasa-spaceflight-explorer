@@ -16,6 +16,7 @@ import Mission from './screens/mission'
 import Spacecrafts from './screens/spacecrafts';
 import Spacecraft from './screens/spacecraft';
 import People from './screens/people';
+import Person from './screens/person'
 var axios = require('axios')
 
 class App extends Component {
@@ -44,6 +45,8 @@ class App extends Component {
           <Route exact path="/spacecrafts/:spacecraftURI" component={Spacecraft} />
 
           <Route exact path="/people" component={People} />
+          <Route exact path="/people/:personURI" component={Person} />
+
         </Router>
     );
   }

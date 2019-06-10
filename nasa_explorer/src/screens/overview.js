@@ -3,7 +3,9 @@ import nasa from '../nasa.png';
 import '../App.css';
 import Grid from '@material-ui/core/Grid';
 import CountUp from 'react-countup';
+import { Timeline } from 'rsuite';
 var axios = require('axios')
+
 
 class Missions extends Component {
 
@@ -14,16 +16,16 @@ class Missions extends Component {
   }
 
   getData() {
-    axios.get('http://localhost:3001/sparql/missionCount')
+    axios.get('http://localhost:3001/sparql/missions/missionCount')
          .then(data => this.setState({missionCount: data.data[0].count}))
          .catch(err => console.log(err) )
-    axios.get('http://localhost:3001/sparql/spacecraftCount')
+    axios.get('http://localhost:3001/sparql/spacecrafts/spacecraftCount')
          .then(data => this.setState({spacecraftCount: data.data[0].count}))
          .catch(err => console.log(err) )
-    axios.get('http://localhost:3001/sparql/launchCount')
+    axios.get('http://localhost:3001/sparql/launches/launchCount')
          .then(data => this.setState({launchCount: data.data[0].count}))
          .catch(err => console.log(err) )
-    axios.get('http://localhost:3001/sparql/personCount')
+    axios.get('http://localhost:3001/sparql/people/personCount')
          .then(data => this.setState({personCount: data.data[0].count}))
          .catch(err => console.log(err) )
   }

@@ -27,10 +27,10 @@ class People extends Component {
   }
 
   getData() {
-    axios.get('http://localhost:3001/sparql/peopleInfo')
+    axios.get('http://localhost:3001/sparql/people')
          .then(data => {
            for (var i in data.data) {
-            axios.get('http://localhost:3001/sparql/dbpedia/personInfo/' + encodeURIComponent(data.data[i].dbpediaURI))
+            axios.get('http://localhost:3001/dbpedia/personInfoMin/' + encodeURIComponent(data.data[i].dbpediaURI))
             .then(dbpData => { if(dbpData.data[0]) this.setState({ people: [...this.state.people , dbpData.data[0]], filteredData: this.state.people}) } )
             .catch(err => console.log(err))
            }
@@ -77,10 +77,11 @@ class People extends Component {
             {
                 this.state.filteredData.slice(0, this.state.visible).map (person => {
                     return (
-
                             <Grid item xs={4}>
+                            <Link style={{textDecoration:'none', color: 'white'}} exact to={"/people/" + encodeURIComponent(person.dbpediaURI)} >
                                 <img style={{width:'80%'}} src={person.thumbnail}/>
                                 <p className='nasaFont'>{person.name}</p>
+                                </Link>
                             </Grid>
                   
  

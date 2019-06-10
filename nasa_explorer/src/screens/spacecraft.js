@@ -12,7 +12,6 @@ import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 
 library.add(faExternalLinkAlt)
 
-
 var axios = require('axios')
 
 class Spacecraft extends Component {
@@ -27,11 +26,7 @@ class Spacecraft extends Component {
     axios.get('http://localhost:3001/sparql/spacecrafts/' + this.props.match.params.spacecraftURI)
          .then(data => {
                 this.setState({spacecraftInfo: data.data[0]})
-                if (this.state.spacecraftInfo.launch) {
-                    axios.get('http://localhost:3001/sparql/launches/' + encodeURIComponent(this.state.spacecraftInfo.launch))
-                         .then(data => {this.setState({launchInfo: data.data[0]})})
-                         .catch(err => console.log(err))
-                }
+                console.log(data.data[0])
             })
          .catch(err => console.log(err) )
   }
@@ -87,17 +82,17 @@ class Spacecraft extends Component {
                         <tr>
                             <td><h3>Launch Date</h3></td>
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                            <td>{this.state.launchInfo.launchDate}</td>
+                            <td>{this.state.spacecraftInfo.launchDate}</td>
                         </tr>
                         <tr>
                             <td ><h3>Launchsite</h3></td>
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                            <td>{this.state.launchInfo.place}</td>
+                            <td>{this.state.spacecraftInfo.place}</td>
                         </tr>
                         <tr>
                             <td ><h3>Launch Vehicle</h3></td>
                             <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                            <td>{this.state.launchInfo.launchVehicle}</td>
+                            <td>{this.state.spacecraftInfo.launchVehicle}</td>
                         </tr>
                     </table>
                 </Grid>
