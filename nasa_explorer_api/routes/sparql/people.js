@@ -43,8 +43,8 @@ var client = new SparqlClient( endpoint, {defaultParameters: {format: 'json'}})
                     dc: 'http://purl.org/dc/elements/1.1/'
                 })
 
-/* GET Mission Names */
-router.get('/peopleInfo', function(req, res, next) {
+/* GET People Names */
+router.get('/', function(req, res, next) {
   const query = `
   SELECT Distinct (SAMPLE(?name) AS ?name) ?dbpediaURI WHERE {
     ?person rdf:type foaf:Person.
@@ -58,27 +58,12 @@ client.query(query)
 .catch(err => {res.jsonp(err)})
 });
 
-router.get('/dbpedia/personInfo/:uri', function(req,res){
-  const query = `SELECT * WHERE {
-    <${req.params.uri}> dbo:thumbnail ?thumbnail ;
-                        foaf:name ?name .
-    }`
-
-
-  dbpediaSparql.client() 
-              .query(query)
-              .timeout(15000) // optional, defaults to 10000
-              .asJson()       // or asXml()
-              .then(data => { res.jsonp(transformResult(data))})
-              .catch(err => { res.jsonp(err)});
-})
-
 /* GET Launch Count */
 router.get('/personCount', function(req, res, next) {
   const query = `
   SELECT (count(DISTINCT ?person) as ?count) WHERE {
     ?person rdf:type foaf:Person . 
-  } LIMIT 100`
+  }`
 
 client.query(query)
       .execute()

@@ -30,65 +30,46 @@ var client = new SparqlClient( endpoint, {defaultParameters: {format: 'json'}})
                     dc: 'http://purl.org/dc/elements/1.1/'
                 })
 
-/* GET Mission Names */
-router.get('/missionNames', function(req, res, next) {
-    const query = `
-    SELECT ?mission ?missionName  WHERE {
-      ?mission rdf:type nasa:Mission . 
-      ?mission dc:title ?missionName .
-    } ORDER BY ?mission LIMIT 100 `
-  
-    client.query(query)
-          .execute()
-          .then(data => {res.jsonp(transformResult(data))})
-          .catch(err => {res.jsonp(err)})
-  });
-
-router.get('/:missionName', function(req, res) {
-  const query = `SELECT ?dbpediaURI  WHERE {
-    ?mission rdf:type nasa:Mission;
-			 dc:title "${req.params.missionName}" .
-   	?mission owl:sameAs ?dbpediaURI;
-}`
+/* GET Missions URIs and Names */
+router.get('/', function(req, res, next) {
+  const query = `
+  SELECT ?missionURI ?missionName  WHERE {
+    ?missionURI rdf:type nasa:Mission . 
+    ?missionURI dc:title ?missionName .
+  } ORDER BY ?missionName LIMIT 100 `
 
   client.query(query)
-    .execute()
-    .then(data => {res.jsonp(transformResult(data))})
-    .catch(err => {res.jsonp(err)})
-})
-
-router.get('/dbpedia/missionInfo/:uri', function(req,res){
-    const query = `SELECT * WHERE {
-      <${req.params.uri}> rdfs:comment ?description;
-                        dbo:thumbnail ?thumbnail;
-                        dbp:crewMembers ?crew.
-                        ?crew dbo:thumbnail ?crewMemberPhoto;
-                              rdfs:label ?crewMemberName.
-      FILTER (lang(?description) = 'en')
-      FILTER (lang(?crewMemberName) = 'en')
-      }`
-  
-   
-  
-    dbpediaSparql.client() 
-                .query(query)
-                .timeout(15000) // optional, defaults to 10000
-                .asJson()       // or asXml()
-                .then(data => { res.jsonp(groupCrew(transformResult(data)))})
-                .catch(err => { res.jsonp(err)});
-  })
+        .execute()
+        .then(data => {res.jsonp(transformResult(data))})
+        .catch(err => {res.jsonp(err)})
+});
 
 /* GET Mission Count */
 router.get('/missionCount', function(req, res, next) {
   const query = `
     SELECT (count(DISTINCT ?mission) as ?count) WHERE {
         ?mission rdf:type nasa:Mission . 
-    } LIMIT 100`
+    }`
 
   client.query(query)
         .execute()
         .then(data => {res.jsonp(transformResult(data))})
         .catch(err => {console.log(err);res.jsonp(err)})
 });
+
+/* GET Mission dbpediaURI */
+router.get('/:missionURI', function(req, res) {
+  const query = `SELECT ?name ?dbpediaURI  WHERE {
+       <${req.params.missionURI}> owl:sameAs ?dbpediaURI;
+                                  dc:title ?name .
+}`
+
+console.log(query)
+
+  client.query(query)
+    .execute()
+    .then(data => {res.jsonp(transformResult(data))})
+    .catch(err => {console.log(err); res.jsonp(err)})
+})
 
 module.exports = router;

@@ -35,32 +35,24 @@ var transformResult = (data) => {
     return newData
 }
 
-
-
-router.get('/:launchURI', function(req, res) {
-  const query = `SELECT Distinct ?launchDate ?place ?launchVehicle  WHERE {
-    <${req.params.launchURI}> nasa:launched ?launchDate;
-                                                    nasa:launchsite ?launchSite;
-                                                    nasa:launchvehicle ?launchVehicle .
-    ?launchSite nasa:place ?place.
-} `
-
-  client.query(query)
-    .execute()
-    .then(data => {res.jsonp(transformResult(data))})
-    .catch(err => {console.log(err);res.jsonp(err)})
-})
+var client = new SparqlClient( endpoint, {defaultParameters: {format: 'json'}})
+                .register({
+                    rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+                    nasa: 'http://purl.org/net/schemas/space/',
+                    foaf: 'http://xmlns.com/foaf/0.1/',
+                    dc: 'http://purl.org/dc/elements/1.1/'
+                })
 
 /* GET Launch Count */
 router.get('/launchCount', function(req, res, next) {
   const query = `
   SELECT (count(DISTINCT ?launch) as ?count) WHERE {
     ?launch rdf:type nasa:Launch . 
-  } LIMIT 100`
+  }`
 
 client.query(query)
       .execute()
-      .then(data => {console.log(data);res.jsonp(transformResult(data))})
+      .then(data => {res.jsonp(transformResult(data))})
       .catch(err => {console.log(err);res.jsonp(err)})
   });
 

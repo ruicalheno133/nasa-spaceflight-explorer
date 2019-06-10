@@ -52,7 +52,7 @@ router.get('/missions', function(req, res, next) {
     SELECT ?missionURI ?missionName  WHERE {
       ?missionURI rdf:type nasa:Mission . 
       ?missionURI dc:title ?missionName .
-    } ORDER BY ?mission LIMIT 100 `
+    } ORDER BY ?missionName LIMIT 100 `
   
     client.query(query)
           .execute()
@@ -66,7 +66,7 @@ router.get('/spacecrafts', function(req, res, next) {
   SELECT ?spacecraftURI ?spacecraftName  WHERE {
     ?spacecraftURI rdf:type nasa:Spacecraft . 
     ?spacecraftURI foaf:name ?spacecraftName .
-  }  LIMIT 100` //TODO: remove limit
+  } ORDER BY ?spacecraftName LIMIT 100` //TODO: remove limit
 
   client.query(query)
         .execute()
@@ -128,9 +128,9 @@ router.get('/spacecrafts/:spacecraftURI', function(req, res) {
 /* GET Launch Information */
 router.get('/launches/:launchURI', function(req, res) {
   const query = `SELECT Distinct ?launchDate ?place ?launchVehicle  WHERE {
-    <${req.params.launchURI}> nasa:launched ?launchDate;
-                                                    nasa:launchsite ?launchSite;
-                                                    nasa:launchvehicle ?launchVehicle .
+    <${req.params.launchURI}> nasa:launchsite ?launchSite;
+                              nasa:launched ?launchDate;
+                              nasa:launchvehicle ?launchVehicle .
     ?launchSite nasa:place ?place.
 } `
 
@@ -165,10 +165,32 @@ router.get('/dbpedia/missionInfo/:uri', function(req,res){
               .catch(err => { res.jsonp(err)});
 })
 
+router.get('/dbpedia/personInfoMin/:uri', function(req,res){
+  const query = `SELECT * WHERE {
+
+    ?dbpediaURI dbo:thumbnail ?thumbnail ;
+                        foaf:name ?name .
+    FILTER (<${req.params.uri}> = ?dbpediaURI)
+    }`
+
+
+  dbpediaSparql.client() 
+              .query(query)
+              .timeout(15000) // optional, defaults to 10000
+              .asJson()       // or asXml()
+              .then(data => { res.jsonp(transformResult(data))})
+              .catch(err => { res.jsonp(err)});
+})
+
 router.get('/dbpedia/personInfo/:uri', function(req,res){
   const query = `SELECT * WHERE {
-    <${req.params.uri}> dbo:thumbnail ?thumbnail ;
-                        foaf:name ?name .
+    <${req.params.uri}> dbo:thumbnail ?thumbnail .
+    OPTIONAL { <${req.params.uri}> dbo:abstract ?abstract . FILTER(LANG(?abstract) = 'en') .}
+    OPTIONAL { <${req.params.uri}> dbo:birthDate ?birthDate . FILTER (REGEX(STR(?birthDate),"[0-9]{4}-[0-9]{2}-[0-9]{2}"))}
+    OPTIONAL { <${req.params.uri}> dbo:deathDate ?deathDate . FILTER (REGEX(STR(?deathDate),"[0-9]{4}-[0-9]{2}-[0-9]{2}")).}
+    OPTIONAL { <${req.params.uri}> foaf:name ?name .}
+    OPTIONAL { <${req.params.uri}> <http://dbpedia.org/ontology/Astronaut/timeInSpace> ?timeInSpace .}
+
     }`
 
 
@@ -189,7 +211,7 @@ router.get('/missionCount', function(req, res, next) {
   const query = `
     SELECT (count(DISTINCT ?mission) as ?count) WHERE {
         ?mission rdf:type nasa:Mission . 
-    } LIMIT 100`
+    }`
 
   client.query(query)
         .execute()
@@ -202,7 +224,7 @@ router.get('/spacecraftCount', function(req, res, next) {
   const query = `
   SELECT (count(DISTINCT ?spacecraft) as ?count) WHERE {
       ?spacecraft rdf:type nasa:Spacecraft . 
-  } LIMIT 100`
+  }`
 
 client.query(query)
       .execute()
@@ -215,7 +237,7 @@ router.get('/launchCount', function(req, res, next) {
   const query = `
   SELECT (count(DISTINCT ?launch) as ?count) WHERE {
     ?launch rdf:type nasa:Launch . 
-  } LIMIT 100`
+  }`
 
 client.query(query)
       .execute()
@@ -228,7 +250,7 @@ router.get('/personCount', function(req, res, next) {
   const query = `
   SELECT (count(DISTINCT ?person) as ?count) WHERE {
     ?person rdf:type foaf:Person . 
-  } LIMIT 100`
+  }`
 
 client.query(query)
       .execute()

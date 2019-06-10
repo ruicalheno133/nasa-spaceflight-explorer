@@ -5,11 +5,12 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
 var sparqlRouter = require('./routes/sparql.js')
-
+var spacecraftsRouter = require('./routes/sparql/spacecrafts')
+var launchesRouter = require('./routes/sparql/launches')
+var missionsRouter = require('./routes/sparql/missions')
+var peopleRouter = require('./routes/sparql/people')
+var dbpediaRouter = require('./routes/dbpedia')
 var app = express();
 
 // view engine setup
@@ -23,8 +24,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/sparql', sparqlRouter)
+app.use('/sparql/spacecrafts', spacecraftsRouter)
+app.use('/sparql/launches', launchesRouter)
+app.use('/sparql/people', peopleRouter)
+app.use('/sparql/missions', missionsRouter)
+app.use('/dbpedia', dbpediaRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
