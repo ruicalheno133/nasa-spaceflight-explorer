@@ -15,7 +15,7 @@
     "http-errors": "~1.6.2",
     "jade": "~1.11.0",
     "json-groupby": "^1.1.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "morgan": "~1.9.0",
     "sparql-client-2": "^0.6.3"
   }
